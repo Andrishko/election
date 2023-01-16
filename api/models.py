@@ -33,14 +33,16 @@ class CustomUser(AbstractUser, PermissionsMixin):
     is_voted = models.BooleanField(default=False)
     token = models.CharField(max_length=1000, default='')
 
+    def __str__(self):
+        return ""
+
 
 class Goals(models.Model):
     candidate_name = models.OneToOneField('Candidates', on_delete=models.CASCADE)
     candidate_goals = models.IntegerField(default=0)
 
-    # def __str__(self):
-    #     return '%s %s' % (self.candidate_goals, self.candidate_name)
-
+    def __str__(self):
+        return '%s %s' % (self.candidate_goals, self.candidate_name)
 
 
 class Votings(models.Model):
