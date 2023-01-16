@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>User Information</title>
+</head>
+
+<body>
+  {% for cand in candidates %}
+  <!--    <div>-->
+  <!--        <p>-->
+  <!--            {{cand.candidate_name}}-->
+  <!--        </p>-->
+  <!--    </div>-->
+  <input type="radio" name="candidate" id="choice{{ forloop.counter }}" value="{{ cand.id }}">
+  <label for="choice{{ forloop.counter }}">{{ cand.candidate_name }} {{cand.id}}</label><br>
+  {% endfor %}
+
+  <button type="button" onclick="displayRadioValue()">
+    Submit
+  </button>
+
+
+  <script rel="javascript" type="text/javascript" href="js/jquery-1.11.3.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script>
+    function displayRadioValue() {
+      var ele = document.getElementsByTagName('input');
+
+      for (i = 0; i < ele.length; i++) {
+
+        if (ele[i].type = "radio") {
+
+          if (ele[i].checked) {
+            $.ajax({
+              type: "PUT",
+              url: 'http://127.0.0.1:8000/votetest/',
+              data: {
+                "candidate": ele[i].value,
+                "token": "{{token}}"
+              },
+              dataType: "json",
+              success: function (data) {
+                console.log(data.status);
+                if (data.status)
+                  window.location.replace('http://127.0.0.1:8000/thanks/')
+                else if (data.status="voted")
+                  window.location.replace('http://127.0.0.1:8000/voted/')
+                else
+                  window.location.replace('http://127.0.0.1:8000/votingexpired/')
+                // any process in data
+                // alert("successfull")
+              },
+              failure: function () {
+                alert("failure");
+              }
+            });
+            console.log(typeof (ele[i].value));
+            // document.getElementById("result").innerHTML
+            //         += candidates[i].candidate_name + " Value: "
+            //         + ele[i].value + "<br>";
+          }
+        }
+      }
+    }
+
+
+
+  </script>
+</body>
+
+</html>
